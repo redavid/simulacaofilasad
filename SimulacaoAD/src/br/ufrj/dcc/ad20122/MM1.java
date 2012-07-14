@@ -9,46 +9,51 @@ import org.apache.commons.math3.distribution.ExponentialDistribution;
 
 import br.ufrj.dcc.ad20122.math.StatisticsSample;
 
-public class MD1 {
+public class MM1 {
 
 	// lambda - arrival rate
 	// mu - service rate
 	public List<Double> run(double lambda, double mu, int clientsSize) {
 
 		ExponentialDistribution arrivalExp = new ExponentialDistribution(lambda);
+		ExponentialDistribution serviceExp = new ExponentialDistribution(
+				1.0 / mu);
 
-		Queue<Double> queue = new LinkedList<Double>();
 		List<Double> usersTime = new ArrayList<Double>();
 
-		double serviceTIme = 1.0 / mu;
+		// arrival times of customers
+		Queue<Double> queue = new LinkedList<Double>();
 
 		// time of next arrival
 		double nextArrival = arrivalExp.sample();
-		// time of next completed service
-		double nextService = nextArrival + serviceTIme;
 
-		System.out.println("Simulate M/D/1 Queue.");
+		// time of next departure
+		double nextDeparture = Double.POSITIVE_INFINITY;
 
-		// simulate the M/D/1 queue
+		// simulate an M/M/1 queue
 		while (usersTime.size() < clientsSize) {
 
-			// next event is an arrival
-			while (nextArrival < nextService) {
+			// it's an arrival
+			if (nextArrival <= nextDeparture) {
+
+				if (queue.isEmpty())
+					nextDeparture = nextArrival + serviceExp.sample();
+
 				queue.add(nextArrival);
 				nextArrival += arrivalExp.sample();
 			}
 
-			// next event is a service completion
-			double arrival = queue.remove();
-			double time = nextService - arrival;
+			// it's a departure
+			else {
+				double wait = nextDeparture - queue.remove();
 
-			usersTime.add(time);
+				usersTime.add(wait);
 
-			// update the queue
-			if (queue.isEmpty()) {
-				nextService = nextArrival + serviceTIme;
-			} else {
-				nextService = nextService + serviceTIme;
+				if (queue.isEmpty())
+					nextDeparture = Double.POSITIVE_INFINITY;
+				else
+					nextDeparture += serviceExp.sample();
+
 			}
 		}
 
@@ -56,13 +61,13 @@ public class MD1 {
 
 	}
 
-	// Test MD1 Queue
+	// Test MM1 Queue
 	public static void main(String[] args) {
 		double lambda = 1.0; // arrival rate
-		double mu = 2.0; // service rate
+		double mu = 4.0; // service rate
 		int clientsSize = 10;
 
-		List<Double> usersTime = new MD1().run(lambda, mu, clientsSize);
+		List<Double> usersTime = new MM1().run(lambda, mu, clientsSize);
 
 		System.err.println(new StatisticsSample(usersTime));
 

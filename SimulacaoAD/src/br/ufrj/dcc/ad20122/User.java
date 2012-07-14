@@ -2,24 +2,24 @@ package br.ufrj.dcc.ad20122;
 
 public class User {
 
-	private double waitTime; // W
+	private double arrivalTime; // W
 	private double serviceTime; // X
 
 	public User() {
 	}
 
-	public User(double waitTime, double serviceTime) {
+	public User(double arrivalTime, double serviceTime) {
 		super();
-		this.waitTime = waitTime;
+		this.arrivalTime = arrivalTime;
 		this.serviceTime = serviceTime;
 	}
 
 	public double getWaitTime() {
-		return waitTime;
+		return arrivalTime;
 	}
 
 	public void setWaitTime(double waitTime) {
-		this.waitTime = waitTime;
+		this.arrivalTime = waitTime;
 	}
 
 	public double getServiceTime() {
@@ -32,12 +32,12 @@ public class User {
 
 	// T
 	public double getTotalTime() {
-		return this.waitTime + this.serviceTime;
+		return this.arrivalTime + this.serviceTime;
 	}
 
 	@Override
 	public String toString() {
-		return "User with wait time: " + this.waitTime + " and service time: "
+		return "User with wait time: " + this.arrivalTime + " and service time: "
 				+ this.serviceTime;
 	}
 
