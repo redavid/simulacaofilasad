@@ -1,14 +1,14 @@
 package br.ufrj.dcc.ad20122;
 
-public class Usuario {
+public class User {
 
 	private double waitTime; // W
 	private double serviceTime; // X
 
-	public Usuario() {
+	public User() {
 	}
 
-	public Usuario(double waitTime, double serviceTime) {
+	public User(double waitTime, double serviceTime) {
 		super();
 		this.waitTime = waitTime;
 		this.serviceTime = serviceTime;
