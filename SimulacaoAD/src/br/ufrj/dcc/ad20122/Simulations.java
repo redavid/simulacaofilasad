@@ -1,58 +1,137 @@
 package br.ufrj.dcc.ad20122;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
+
+import org.apache.commons.math3.distribution.ExponentialDistribution;
+
+import br.ufrj.dcc.ad20122.math.StatisticsSample;
 
 public class Simulations {
 
-	public void simulateCase1(double lambda, double mu1, double mu2,
+	// Case Deterministic - Exponencial
+	public List<Double> simulateCase1(double lambda, double mu1, double mu2,
 			int clientsSize) {
 
-		// Queue<Double> queue1 = new LinkedList<Double>();
-		// Stack<Double> queue2 = new Stack<Double>();
-		//
-		// List<Double> usersTime = new ArrayList<Double>();
-		//
-		// double serviceTIme1 = 1.0 / mu1;
-		// double serviceTIme2 = Double.POSITIVE_INFINITY;
-		//
-		// ExponentialDistribution arrivalExp = new
-		// ExponentialDistribution(lambda);
-		// ExponentialDistribution service2Exp = new ExponentialDistribution(
-		// 1.0 / mu2);
-		//
-		// // time of next arrival
-		// double nextArrival = arrivalExp.sample();
-		//
-		// // time of next completed service
-		// double nextService = nextArrival + serviceTIme1;
+		Queue<User> queue1 = new LinkedList<User>();
+		Stack<User> queue2 = new Stack<User>();
 
-		// System.out.println("Simulate 2 Queues.");
+		List<Double> listTime1 = new ArrayList<Double>();
+		List<Double> listTime2 = new ArrayList<Double>();
 
-		// simulate the M/D/1 queue
-		while (clientsSize-- > 0) {
+		double serviceTime = 1.0 / mu1;
 
-			// while(nextArrival < serviceTIme1 && nextArrival < serviceTIme2){
-			// User newUser = new User(waitTime, serviceTime)
-			// }
+		ExponentialDistribution arrivalExp = new ExponentialDistribution(lambda);
+		ExponentialDistribution service2Exp = new ExponentialDistribution(
+				1.0 / mu2);
 
-			// // next event is an arrival
-			// while (nextArrival < nextService) {
-			// queue.add(nextArrival);
-			// nextArrival += arrivalExp.sample();
-			// }
-			//
-			// // next event is a service completion
-			// double arrival = queue.remove();
-			// double time = nextService - arrival;
-			//
-			// usersTime.add(time);
-			//
-			// // update the queue
-			// if (queue.isEmpty()) {
-			// nextService = nextArrival + serviceTIme;
-			// } else {
-			// nextService = nextService + serviceTIme;
-			// }
+		double nextArrival = arrivalExp.sample();
+
+		double nextService1 = nextArrival + serviceTime;
+		double nextService2 = Double.POSITIVE_INFINITY;
+
+		boolean stopCondition = true;
+
+		while (stopCondition) {
+
+			if (nextArrival <= nextService1 && nextArrival <= nextService2) {
+
+				User newUser = new User(nextArrival, serviceTime);
+
+				queue1.add(newUser);
+				nextArrival += arrivalExp.sample();
+
+				if (queue1.isEmpty() && queue2.isEmpty()) {
+					nextService1 = nextArrival + serviceTime;
+				} else if (queue1.isEmpty() && !queue2.isEmpty()) {
+					User interrupedUser = queue2.peek();
+					interrupedUser.setServiceTime(nextService2 - nextArrival);
+					nextService2 = Double.POSITIVE_INFINITY;
+					nextService1 = nextArrival + serviceTime;
+				}
+
+			} else if (nextService1 <= nextService2) {
+
+				User actualUserQueue1 = queue1.remove();
+				double tempo1 = nextService1
+						- actualUserQueue1.getArrivalTime();
+				listTime1.add(tempo1);
+
+				User newUser2 = new User(nextService1, service2Exp.sample());
+				nextService2 = nextService1 + newUser2.getServiceTime();
+				queue2.push(newUser2);
+
+				if (queue1.isEmpty()) {
+					nextService1 = nextArrival + serviceTime;
+				} else {
+					double nextServiceTime = queue1.peek().getServiceTime();
+					nextService1 += nextServiceTime;
+
+					if (!queue2.isEmpty()) {
+						nextService2 += nextServiceTime;
+					}
+
+				}
+
+			} else {
+				User actualUserQueue2 = queue2.pop();
+				double tempo2 = nextService2
+						- actualUserQueue2.getArrivalTime();
+
+				listTime2.add(tempo2);
+
+				// update the queue
+				if (queue2.isEmpty()) {
+					nextService2 = Double.POSITIVE_INFINITY;
+				} else {
+					nextService2 += actualUserQueue2.getServiceTime();
+				}
+			}
+
+			stopCondition = listTime2.size() < clientsSize;
+
 		}
 
+		System.out.println("QueueSize 1: " + listTime1.size());
+		for (Double double1 : listTime1) {
+			System.out.println(" Queue1 Time: " + double1);
+		}
+
+		System.out.println("QueueSize 2: " + listTime2.size());
+		for (Double double1 : listTime2) {
+			System.out.println(" Queue2 Time: " + double1);
+		}
+
+		List<Double> resultList = new ArrayList<Double>();
+		for (int i = 0; i < clientsSize; i++) {
+			double time1 = listTime1.get(i);
+			double time2 = listTime2.get(i);
+
+			resultList.add(time1 + time2);
+		}
+
+		for (Double double1 : resultList) {
+			System.out.println("QueueUniom Time: " + double1);
+		}
+
+		return resultList;
+	}
+
+	public static void main(String[] args) {
+		double lambda = 1.0; // arrival rate
+		double mu1 = 2.0, mu2 = 4.0; // service rate
+		int clientsSize = 2;
+
+		List<Double> usersTime = new Simulations().simulateCase1(lambda, mu1,
+				mu2, clientsSize);
+
+		System.err.println(new StatisticsSample(usersTime));
+
+		for (Double double1 : usersTime) {
+			System.out.println("User time: " + double1);
+		}
 	}
 }

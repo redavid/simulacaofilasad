@@ -45,7 +45,8 @@ public class MM1 {
 
 			// it's a departure
 			else {
-				double wait = nextDeparture - queue.remove();
+				double arrival = queue.remove();
+				double wait = nextDeparture - arrival;
 
 				usersTime.add(wait);
 
