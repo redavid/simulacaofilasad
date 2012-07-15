@@ -33,22 +33,23 @@ public class MD1 {
 		while (usersTime.size() < clientsSize) {
 
 			// next event is an arrival
-			while (nextArrival < nextService) {
+			if (nextArrival < nextService) {
 				queue.add(nextArrival);
 				nextArrival += arrivalExp.sample();
-			}
-
-			// next event is a service completion
-			double arrival = queue.remove();
-			double time = nextService - arrival;
-
-			usersTime.add(time);
-
-			// update the queue
-			if (queue.isEmpty()) {
-				nextService = nextArrival + serviceTIme;
 			} else {
-				nextService = nextService + serviceTIme;
+
+				// next event is a service completion
+				double arrival = queue.remove();
+				double time = nextService - arrival;
+
+				usersTime.add(time);
+
+				// update the queue
+				if (queue.isEmpty()) {
+					nextService = nextArrival + serviceTIme;
+				} else {
+					nextService = nextService + serviceTIme;
+				}
 			}
 		}
 
