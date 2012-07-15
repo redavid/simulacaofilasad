@@ -34,12 +34,12 @@ public class Main {
 			switch (sample.getSimulationCase()) {
 			case CASE1:
 
-				statistics.add(new Simulations().simulateCase1(sample.getLambda(), sample.getMu1(), sample.getMu2(), sample.getSampleSize()));
-				              
-			
+				statistics.add(new Simulations().simulateCase1(sample));
+
 				break;
 
 			case CASE2:
+				statistics.add(new Simulations().simulateCase2(sample));
 
 				break;
 
@@ -47,7 +47,7 @@ public class Main {
 				break;
 			}
 		}
-		
+
 		for (StatisticsSample statisticsSample : statistics) {
 			System.out.println(statisticsSample);
 		}

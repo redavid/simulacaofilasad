@@ -5,12 +5,24 @@ import java.util.List;
 import org.apache.commons.math3.distribution.TDistribution;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
+import br.ufrj.dcc.ad20122.model.Sample;
+
 public class StatisticsSample {
 
 	SummaryStatistics summaryStatistics;
+	Sample sample;
 
 	public StatisticsSample(List<Double> data) {
 
+		this.summaryStatistics = new SummaryStatistics();
+		for (Double double1 : data) {
+			summaryStatistics.addValue(double1);
+		}
+	}
+
+	public StatisticsSample(List<Double> data, Sample sample) {
+
+		this.sample = sample;
 		this.summaryStatistics = new SummaryStatistics();
 		for (Double double1 : data) {
 			summaryStatistics.addValue(double1);
@@ -44,10 +56,23 @@ public class StatisticsSample {
 
 	@Override
 	public String toString() {
+		return (sample != null ? this.toStringWithSample() : this
+				.toStringWithoutSample());
+	}
+
+	private String toStringWithSample() {
+		return "Statistics - " + this.sample + " Mean:"
+				+ this.getMean() + " Variance: " + this.getVariance()
+				+ " ConfidenceInterval 95%: "
+				+ this.getConfidenceInterval95FromMean();
+	}
+
+	private String toStringWithoutSample() {
 		return "Statistics - Mean:" + this.getMean() + " Variance: "
 				+ this.getVariance() + " StandardDeviation: "
 				+ this.getStandardDeviation() + " ConfidenceInterval 95%: "
 				+ this.getConfidenceInterval95FromMean();
+
 	}
 
 	public class ConfidenceInterval {
