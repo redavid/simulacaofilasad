@@ -19,6 +19,19 @@ public class Sample {
 	@Element
 	private double mu2;
 
+	public Sample() {
+	}
+
+	public Sample(SimulationCase simulationCase, int sampleSize, double lambda,
+			double mu1, double mu2) {
+		super();
+		this.simulationCase = simulationCase;
+		this.sampleSize = sampleSize;
+		this.lambda = lambda;
+		this.mu1 = mu1;
+		this.mu2 = mu2;
+	}
+
 	public SimulationCase getSimulationCase() {
 		return simulationCase;
 	}
@@ -57,6 +70,13 @@ public class Sample {
 
 	public void setMu2(double mu2) {
 		this.mu2 = mu2;
+	}
+
+	@Override
+	public String toString() {
+		return "Sample [simulationCase=" + simulationCase + ", sampleSize="
+				+ sampleSize + ", lambda=" + lambda + ", mu1=" + mu1 + ", mu2="
+				+ mu2 + "]";
 	}
 
 }

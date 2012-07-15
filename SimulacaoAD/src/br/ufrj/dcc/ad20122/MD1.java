@@ -61,9 +61,9 @@ public class MD1 {
 	public static void main(String[] args) {
 		double lambda = 1.0; // arrival rate
 		double mu = 2.0; // service rate
-		int clientsSize = 10;
+		int sampleSize = 10;
 
-		List<Double> usersTime = new MD1().run(lambda, mu, clientsSize);
+		List<Double> usersTime = new MD1().run(lambda, mu, sampleSize);
 
 		System.err.println(new StatisticsSample(usersTime));
 
