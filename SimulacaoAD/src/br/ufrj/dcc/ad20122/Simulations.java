@@ -58,7 +58,10 @@ public class Simulations {
 				User actualUserQueue1 = queue1.remove();
 				double tempo1 = nextService1
 						- actualUserQueue1.getArrivalTime();
-				listTime1.add(tempo1);
+
+				if (listTime1.size() < clientsSize) {
+					listTime1.add(tempo1 + actualUserQueue1.getServiceTime());
+				}
 
 				User newUser2 = new User(nextService1, service2Exp.sample());
 				nextService2 = nextService1 + newUser2.getServiceTime();
@@ -81,7 +84,7 @@ public class Simulations {
 				double tempo2 = nextService2
 						- actualUserQueue2.getArrivalTime();
 
-				listTime2.add(tempo2);
+				listTime2.add(tempo2 + actualUserQueue2.getServiceTime());
 
 				// update the queue
 				if (queue2.isEmpty()) {
@@ -95,15 +98,15 @@ public class Simulations {
 
 		}
 
-		System.out.println("QueueSize 1: " + listTime1.size());
-		for (Double double1 : listTime1) {
-			System.out.println(" Queue1 Time: " + double1);
-		}
-
-		System.out.println("QueueSize 2: " + listTime2.size());
-		for (Double double1 : listTime2) {
-			System.out.println(" Queue2 Time: " + double1);
-		}
+		// System.out.println("QueueSize 1: " + listTime1.size());
+		// for (Double double1 : listTime1) {
+		// System.out.println(" Queue1 Time: " + double1);
+		// }
+		//
+		// System.out.println("QueueSize 2: " + listTime2.size());
+		// for (Double double1 : listTime2) {
+		// System.out.println(" Queue2 Time: " + double1);
+		// }
 
 		List<Double> resultList = new ArrayList<Double>();
 		for (int i = 0; i < clientsSize; i++) {
@@ -113,9 +116,9 @@ public class Simulations {
 			resultList.add(time1 + time2);
 		}
 
-		for (Double double1 : resultList) {
-			System.out.println("QueueUniom Time: " + double1);
-		}
+		// for (Double double1 : resultList) {
+		// System.out.println("QueueUniom Time: " + double1);
+		// }
 
 		return resultList;
 	}
@@ -123,15 +126,15 @@ public class Simulations {
 	public static void main(String[] args) {
 		double lambda = 1.0; // arrival rate
 		double mu1 = 2.0, mu2 = 4.0; // service rate
-		int clientsSize = 2;
+		int clientsSize = 10000;
 
 		List<Double> usersTime = new Simulations().simulateCase1(lambda, mu1,
 				mu2, clientsSize);
 
 		System.err.println(new StatisticsSample(usersTime));
 
-		for (Double double1 : usersTime) {
-			System.out.println("User time: " + double1);
-		}
+		// for (Double double1 : usersTime) {
+		// System.out.println("User time: " + double1);
+		// }
 	}
 }
