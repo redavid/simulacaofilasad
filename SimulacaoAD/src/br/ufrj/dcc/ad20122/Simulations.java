@@ -13,8 +13,8 @@ import br.ufrj.dcc.ad20122.math.StatisticsSample;
 public class Simulations {
 
 	// Case Deterministic - Exponencial
-	public List<Double> simulateCase1(double lambda, double mu1, double mu2,
-			int clientsSize) {
+	public StatisticsSample simulateCase1(double lambda, double mu1,
+			double mu2, int clientsSize) {
 
 		Queue<User> queue1 = new LinkedList<User>();
 		Stack<User> queue2 = new Stack<User>();
@@ -120,7 +120,7 @@ public class Simulations {
 		// System.out.println("QueueUniom Time: " + double1);
 		// }
 
-		return resultList;
+		return new StatisticsSample(resultList);
 	}
 
 	public static void main(String[] args) {
@@ -128,10 +128,8 @@ public class Simulations {
 		double mu1 = 2.0, mu2 = 4.0; // service rate
 		int clientsSize = 10000;
 
-		List<Double> usersTime = new Simulations().simulateCase1(lambda, mu1,
-				mu2, clientsSize);
-
-		System.err.println(new StatisticsSample(usersTime));
+		System.err.println(new Simulations().simulateCase1(lambda, mu1, mu2,
+				clientsSize));
 
 		// for (Double double1 : usersTime) {
 		// System.out.println("User time: " + double1);
