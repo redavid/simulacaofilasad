@@ -75,7 +75,7 @@ public class Simulations {
 				}
 
 				User newUser2 = new User(nextService1, service2Exp.sample());
-				nextService2 = nextService1+ newUser2.getServiceTime();
+				nextService2 = nextService1 + newUser2.getServiceTime();
 				queue2.addFirst(newUser2);
 
 				if (queue1.isEmpty()) {
@@ -124,10 +124,10 @@ public class Simulations {
 			timesW.add(time1 + time2);
 		}
 
-		List<Double> timeT1Transient = timeW1.subList(TRANSIENT_VALUE,
+		List<Double> timeT1Transient = timeT1.subList(TRANSIENT_VALUE,
 				timeT1.size());
-		List<Double> timeT2Transient = timeW2.subList(TRANSIENT_VALUE,
-				timeT1.size());
+		List<Double> timeT2Transient = timeT2.subList(TRANSIENT_VALUE,
+				timeT2.size());
 
 		List<Double> timesT = new ArrayList<Double>();
 		for (int i = 0; i < sample.getSampleSize() - TRANSIENT_VALUE; i++) {
@@ -247,10 +247,10 @@ public class Simulations {
 			timesW.add(time1 + time2);
 		}
 
-		List<Double> timeT1Transient = timeW1.subList(TRANSIENT_VALUE,
+		List<Double> timeT1Transient = timeT1.subList(TRANSIENT_VALUE,
 				timeT1.size());
-		List<Double> timeT2Transient = timeW2.subList(TRANSIENT_VALUE,
-				timeT1.size());
+		List<Double> timeT2Transient = timeT2.subList(TRANSIENT_VALUE,
+				timeT2.size());
 
 		List<Double> timesT = new ArrayList<Double>();
 		for (int i = 0; i < sample.getSampleSize() - TRANSIENT_VALUE; i++) {
