@@ -75,7 +75,7 @@ public class Simulations {
 				}
 
 				User newUser2 = new User(nextService1, service2Exp.sample());
-				nextService2 = nextService1;// + newUser2.getServiceTime();
+				nextService2 = nextService1+ newUser2.getServiceTime();
 				queue2.addFirst(newUser2);
 
 				if (queue1.isEmpty()) {

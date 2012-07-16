@@ -1,10 +1,13 @@
 package br.ufrj.dcc.ad20122;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 
 import br.ufrj.dcc.ad20122.math.StatisticsSample;
@@ -13,12 +16,17 @@ public class MD1 {
 
 	// lambda - arrival rate
 	// mu - service rate
-	public List<Double> run(double lambda, double mu, int clientsSize) {
+	public StatisticsSample run(double lambda, double mu, int clientsSize) {
 
 		ExponentialDistribution arrivalExp = new ExponentialDistribution(lambda);
 
 		Queue<Double> queue = new LinkedList<Double>();
-		List<Double> usersTime = new ArrayList<Double>();
+
+		// W
+		List<Double> timeW1 = new ArrayList<Double>();
+
+		// T time
+		List<Double> timeT1 = new ArrayList<Double>();
 
 		double serviceTIme = 1.0 / mu;
 
@@ -30,7 +38,7 @@ public class MD1 {
 		System.out.println("Simulate M/D/1 Queue.");
 
 		// simulate the M/D/1 queue
-		while (usersTime.size() < clientsSize) {
+		while (timeW1.size() < clientsSize) {
 
 			// next event is an arrival
 			if (nextArrival < nextService) {
@@ -42,7 +50,8 @@ public class MD1 {
 				double arrival = queue.remove();
 				double time = nextService - arrival;
 
-				usersTime.add(time);
+				timeW1.add(time);
+				timeT1.add(time + serviceTIme);
 
 				// update the queue
 				if (queue.isEmpty()) {
@@ -53,7 +62,7 @@ public class MD1 {
 			}
 		}
 
-		return usersTime;
+		return new StatisticsSample(timeW1, timeT1, null);
 
 	}
 
@@ -61,14 +70,23 @@ public class MD1 {
 	public static void main(String[] args) {
 		double lambda = 1.0; // arrival rate
 		double mu = 2.0; // service rate
-		int sampleSize = 10;
+		int sampleSize = 10000;
 
-		List<Double> usersTime = new MD1().run(lambda, mu, sampleSize);
+		StatisticsSample statisticsSample = new MD1().run(lambda, mu,
+				sampleSize);
 
-		System.err.println(new StatisticsSample(usersTime));
+		StringBuilder builder = new StringBuilder();
 
-		for (Double double1 : usersTime) {
-			System.out.println("User time: " + double1);
+		String statisticsString = statisticsSample.toString();
+		builder.append(statisticsString);
+		System.out.println(statisticsString);
+		builder.append(statisticsSample.toStringTIndividual());
+
+		try {
+			FileUtils.writeStringToFile(new File("./samples/statistics_MD1.txt"),
+					builder.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 	}
