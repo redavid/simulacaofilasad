@@ -1,9 +1,11 @@
 package br.ufrj.dcc.ad20122;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
@@ -70,9 +72,19 @@ public class Main {
 			}
 		}
 
+		StringBuilder builder = new StringBuilder();
 		for (StatisticsSample statisticsSample : statistics) {
-			System.out.println(statisticsSample);
+			String statisticsString = statisticsSample.toString();
+			builder.append(statisticsString);
+			System.out.println(statisticsString);
+			builder.append(statisticsSample.toStringTIndividual());
 		}
 
+		try {
+			FileUtils.writeStringToFile(new File("./samples/statistics.txt"),
+					builder.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
