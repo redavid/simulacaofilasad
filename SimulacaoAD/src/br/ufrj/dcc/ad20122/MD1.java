@@ -97,5 +97,11 @@ public class MD1 {
 			e.printStackTrace();
 		}
 
+		try {
+			statisticsSample.generateChart("./samples/chart.jpg");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 }

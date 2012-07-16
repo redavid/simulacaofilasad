@@ -1,5 +1,7 @@
 package br.ufrj.dcc.ad20122.math;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +9,12 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.distribution.TDistribution;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import br.ufrj.dcc.ad20122.model.Sample;
 
@@ -96,8 +104,7 @@ public class StatisticsSample {
 
 	}
 
-	public String toStringTIndividual() {
-
+	private List<Double> getDataTMean() {
 		List<Double> dataTMean = new ArrayList<Double>();
 		Mean mean = new Mean();
 
@@ -110,11 +117,42 @@ public class StatisticsSample {
 			dataTMean.add(mean.evaluate(dataTArray, 0, i));
 
 		}
+		return dataTMean;
+	}
+
+	public void generateChart(String path) throws IOException {
+
+		XYSeries series = new XYSeries("N por E[T]");
+
+		List<Double> means = this.getDataTMean();
+		for (int i = 0; i < means.size(); i++) {
+			series.add(i, means.get(i));
+
+		}
+		XYSeriesCollection dataset = new XYSeriesCollection();
+		dataset.addSeries(series);
+
+		// Generate the graph
+		JFreeChart chart = ChartFactory.createXYLineChart("N X E[T]", // Title
+				"N", // x-axis Label
+				"E[T]", // y-axis Label
+				dataset, // Dataset
+				PlotOrientation.VERTICAL, // Plot Orientation
+				true, // Show Legend
+				true, // Use tooltips
+				false // Configure chart to generate URLs?
+				);
+
+		ChartUtilities.saveChartAsJPEG(new File(path), chart, 500, 300);
+
+	}
+
+	public String toStringTIndividual() {
 
 		StringBuilder builder = new StringBuilder();
 		builder.append("T invidual: \n");
-		for (double double1 : dataTMean) {
-			builder.append("" + double1);
+		for (double double1 : this.getDataTMean()) {
+			builder.append(("" + double1).replace(".", ","));
 			builder.append("\n");
 		}
 
