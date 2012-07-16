@@ -9,6 +9,9 @@ import br.ufrj.dcc.ad20122.model.Sample;
 
 public class StatisticsSample {
 
+	List<Double> dataW;
+	List<Double> dataT;
+
 	SummaryStatistics summaryStatisticsW;
 	SummaryStatistics summaryStatisticsT;
 	Sample sample;
@@ -23,6 +26,9 @@ public class StatisticsSample {
 
 	public StatisticsSample(List<Double> dataW, List<Double> dataT,
 			Sample sample) {
+
+		this.dataW = dataW;
+		this.dataT = dataT;
 
 		this.sample = sample;
 		this.summaryStatisticsW = new SummaryStatistics();
@@ -60,17 +66,17 @@ public class StatisticsSample {
 		return this.summaryStatisticsT.getStandardDeviation();
 	}
 
-	private ConfidenceInterval getWConfidenceInterval95(double value) {
-		double significance = 0.95;
-
-		TDistribution tDist = new TDistribution(summaryStatisticsW.getN() - 1);
-		double a = tDist.inverseCumulativeProbability(1.0 - significance / 2);
-		double confidence = a * summaryStatisticsW.getStandardDeviation()
-				/ Math.sqrt(summaryStatisticsW.getN());
-
-		return new ConfidenceInterval(value - confidence, value + confidence);
-
-	}
+	// private ConfidenceInterval getWConfidenceInterval95(double value) {
+	// double significance = 0.95;
+	//
+	// TDistribution tDist = new TDistribution(summaryStatisticsW.getN() - 1);
+	// double a = tDist.inverseCumulativeProbability(1.0 - significance / 2);
+	// double confidence = a * summaryStatisticsW.getStandardDeviation()
+	// / Math.sqrt(summaryStatisticsW.getN());
+	//
+	// return new ConfidenceInterval(value - confidence, value + confidence);
+	//
+	// }
 
 	private ConfidenceInterval getTConfidenceInterval95(double value) {
 		double significance = 0.95;
@@ -82,6 +88,17 @@ public class StatisticsSample {
 
 		return new ConfidenceInterval(value - confidence, value + confidence);
 
+	}
+
+	public String toStringTIndividual() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("T invidual: \n");
+		for (double double1 : this.dataT) {
+			builder.append("" + double1);
+			builder.append("\n");
+		}
+
+		return builder.toString();
 	}
 
 	@Override
