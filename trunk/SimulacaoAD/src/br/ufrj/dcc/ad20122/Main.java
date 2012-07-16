@@ -34,12 +34,34 @@ public class Main {
 			switch (sample.getSimulationCase()) {
 			case CASE1:
 
-				statistics.add(new Simulations().simulateCase1(sample));
+				switch (sample.getSimulationType()) {
+				case DETERMINISTIC:
+					statistics.add(new Simulations()
+							.simulateDetExpCase1(sample));
+					break;
+
+				case NORMAL:
+
+					break;
+				default:
+					break;
+				}
 
 				break;
 
 			case CASE2:
-				statistics.add(new Simulations().simulateCase2(sample));
+				switch (sample.getSimulationType()) {
+				case DETERMINISTIC:
+					statistics.add(new Simulations()
+							.simulateDetExpCase2(sample));
+					break;
+
+				case NORMAL:
+
+					break;
+				default:
+					break;
+				}
 
 				break;
 
