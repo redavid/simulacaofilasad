@@ -185,19 +185,15 @@ public class StatisticsSample {
 	}
 
 	private String toStringWithSample() {
-		return "" + this.sample + " E[W]:" + this.getWMean() + " E[T] Chart:"
-				+ this.getMeansTMean() + " E[T]:" + this.getTMean()
-				+ ", Var[T]: " + this.getTVariance()
-				+ ", E[T] ConfidenceInterval: "
+		return "" + this.sample + " E[T]:" + this.getTMean() + ", Var[T]: "
+				+ this.getTVariance() + ", E[T] ConfidenceInterval: "
 				+ this.getMeansTConfidenceInterval95(this.getTMean())
 				+ ", Var[T] ConfidenceInterval: "
 				+ this.getMeansTConfidenceInterval95(this.getTVariance());
 	}
 
 	private String toStringWithoutSample() {
-		return " E[T] Chart:" + " E[W]:" + this.getWMean()
-				+ this.getMeansTMean() + " E[T]:" + this.getTMean()
-				+ ", Var[T]: " + this.getTVariance()
+		return "E[T]:" + this.getTMean() + ", Var[T]: " + this.getTVariance()
 				+ ", E[T] ConfidenceInterval: "
 				+ this.getMeansTConfidenceInterval95(this.getTMean())
 				+ ", Var[T] ConfidenceInterval: "
