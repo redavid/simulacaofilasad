@@ -2,51 +2,51 @@
 	<samples>
 		<!-- DETERMINISTIC -->
 		<sample case="CASE1" type="DETERMINISTIC">
-			<size>10000</size>
+			<size>100000</size>
 			<lambda>1.0</lambda>
 			<mu1>2.0</mu1>
 			<mu2>4.0</mu2>
 		</sample>
 		<sample case="CASE1" type="DETERMINISTIC">
-			<size>10000</size>
+			<size>100000</size>
 			<lambda>1.5</lambda>
 			<mu1>10.0</mu1>
 			<mu2>4.0</mu2>
 		</sample>
 		<sample case="CASE1" type="DETERMINISTIC">
-			<size>10000</size>
+			<size>100000</size>
 			<lambda>2.0</lambda>
 			<mu1>10.0</mu1>
 			<mu2>4.0</mu2>
 		</sample>
 		<sample case="CASE2" type="DETERMINISTIC">
-			<size>10000</size>
+			<size>100000</size>
 			<lambda>1.0</lambda>
 			<mu1>2.0</mu1>
 			<mu2>4.0</mu2>
 		</sample>
 		<sample case="CASE2" type="DETERMINISTIC">
-			<size>10000</size>
+			<size>100000</size>
 			<lambda>1.5</lambda>
 			<mu1>10.0</mu1>
 			<mu2>4.0</mu2>
 		</sample>
 		<sample case="CASE2" type="DETERMINISTIC">
-			<size>10000</size>
+			<size>100000</size>
 			<lambda>2.0</lambda>
 			<mu1>10.0</mu1>
 			<mu2>4.0</mu2>
 		</sample>
 		<!-- NORMAL -->
 		<sample case="CASE1" type="NORMAL">
-			<size>10000</size>
+			<size>100000</size>
 			<lambda>0.5</lambda>
 			<mean>10.0</mean>
 			<standardDeviation>1.0</standardDeviation>
 			<mu2>4.0</mu2>
 		</sample>
 		<sample case="CASE2" type="NORMAL">
-			<size>10000</size>
+			<size>100000</size>
 			<lambda>0.5</lambda>
 			<mean>10.0</mean>
 			<standardDeviation>1.0</standardDeviation>
