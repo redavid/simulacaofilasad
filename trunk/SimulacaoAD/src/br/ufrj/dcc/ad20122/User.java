@@ -41,7 +41,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User with wait time: " + this.arrivalTime
+		return "User with arrival time: " + this.arrivalTime
 				+ " and service time: " + this.serviceTime + " and Time: "
 				+ this.time;
 	}
