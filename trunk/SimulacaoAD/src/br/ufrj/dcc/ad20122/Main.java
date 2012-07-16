@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
@@ -15,12 +14,13 @@ import br.ufrj.dcc.ad20122.model.SampleSimulation;
 
 public class Main {
 
-	private static final String BOOKSTORE_XML = "./samples/samples.xml";
+	private static final String SAMPLE_XML = "./samples/samples.xml";
+	private static final String CHART = "./samples/chart.jpg";
 
 	public static void main(String[] args) {
 
 		Serializer serializer = new Persister();
-		File source = new File(BOOKSTORE_XML);
+		File source = new File(SAMPLE_XML);
 		SampleSimulation simulations = null;
 		try {
 			simulations = serializer.read(SampleSimulation.class, source);
@@ -72,19 +72,18 @@ public class Main {
 			}
 		}
 
-		StringBuilder builder = new StringBuilder();
+		int i = 0;
 		for (StatisticsSample statisticsSample : statistics) {
 			String statisticsString = statisticsSample.toString();
-			builder.append(statisticsString);
 			System.out.println(statisticsString);
-			builder.append(statisticsSample.toStringTIndividual());
+			try {
+				statisticsSample.generateChart(CHART.replace(".jpg", i++
+						+ ".jpg"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		}
 
-		try {
-			FileUtils.writeStringToFile(new File("./samples/statistics.txt"),
-					builder.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }
