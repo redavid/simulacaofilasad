@@ -15,6 +15,8 @@ import br.ufrj.dcc.ad20122.model.SimulationType;
 
 public class Simulations {
 
+	private static int TRANSIENT_VALUE = 1000;
+
 	// Case Deterministic - Exponencial
 	public StatisticsSample simulateDetExpCase1(Sample sample) {
 
@@ -109,35 +111,31 @@ public class Simulations {
 
 		}
 
-		// System.out.println("QueueSize 1: " + listTime1.size());
-		// for (Double double1 : listTime1) {
-		// System.out.println(" Queue1 Time: " + double1);
-		// }
-		//
-		// System.out.println("QueueSize 2: " + listTime2.size());
-		// for (Double double1 : listTime2) {
-		// System.out.println(" Queue2 Time: " + double1);
-		// }
+		List<Double> timeW1Transient = timeW1.subList(TRANSIENT_VALUE,
+				timeW1.size());
+		List<Double> timeW2Transient = timeW2.subList(TRANSIENT_VALUE,
+				timeW2.size());
 
 		List<Double> timesW = new ArrayList<Double>();
-		for (int i = 0; i < sample.getSampleSize(); i++) {
-			double time1 = timeW1.get(i);
-			double time2 = timeW2.get(i);
+		for (int i = 0; i < sample.getSampleSize() - TRANSIENT_VALUE; i++) {
+			double time1 = timeW1Transient.get(i);
+			double time2 = timeW2Transient.get(i);
 
 			timesW.add(time1 + time2);
 		}
 
+		List<Double> timeT1Transient = timeW1.subList(TRANSIENT_VALUE,
+				timeT1.size());
+		List<Double> timeT2Transient = timeW2.subList(TRANSIENT_VALUE,
+				timeT1.size());
+
 		List<Double> timesT = new ArrayList<Double>();
-		for (int i = 0; i < sample.getSampleSize(); i++) {
-			double time1 = timeT1.get(i);
-			double time2 = timeT2.get(i);
+		for (int i = 0; i < sample.getSampleSize() - TRANSIENT_VALUE; i++) {
+			double time1 = timeT1Transient.get(i);
+			double time2 = timeT2Transient.get(i);
 
 			timesT.add(time1 + time2);
 		}
-
-		// for (Double double1 : resultList) {
-		// System.out.println("QueueUniom Time: " + double1);
-		// }
 
 		return new StatisticsSample(timesW, timesT, sample);
 	}
@@ -236,23 +234,33 @@ public class Simulations {
 
 		}
 
-		List<Double> resultList = new ArrayList<Double>();
-		for (int i = 0; i < sample.getSampleSize(); i++) {
-			double time1 = timeW1.get(i);
-			double time2 = timeW2.get(i);
+		List<Double> timeW1Transient = timeW1.subList(TRANSIENT_VALUE,
+				timeW1.size());
+		List<Double> timeW2Transient = timeW2.subList(TRANSIENT_VALUE,
+				timeW2.size());
 
-			resultList.add(time1 + time2);
+		List<Double> timesW = new ArrayList<Double>();
+		for (int i = 0; i < sample.getSampleSize() - TRANSIENT_VALUE; i++) {
+			double time1 = timeW1Transient.get(i);
+			double time2 = timeW2Transient.get(i);
+
+			timesW.add(time1 + time2);
 		}
 
+		List<Double> timeT1Transient = timeW1.subList(TRANSIENT_VALUE,
+				timeT1.size());
+		List<Double> timeT2Transient = timeW2.subList(TRANSIENT_VALUE,
+				timeT1.size());
+
 		List<Double> timesT = new ArrayList<Double>();
-		for (int i = 0; i < sample.getSampleSize(); i++) {
-			double time1 = timeT1.get(i);
-			double time2 = timeT2.get(i);
+		for (int i = 0; i < sample.getSampleSize() - TRANSIENT_VALUE; i++) {
+			double time1 = timeT1Transient.get(i);
+			double time2 = timeT2Transient.get(i);
 
 			timesT.add(time1 + time2);
 		}
 
-		return new StatisticsSample(resultList, timesT, sample);
+		return new StatisticsSample(timesW, timesT, sample);
 	}
 
 	// Case Normal - Exponencial
