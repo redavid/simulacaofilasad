@@ -6,19 +6,26 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.math3.distribution.ExponentialDistribution;
 
 import br.ufrj.dcc.ad20122.math.StatisticsSample;
 
 public class MD1 {
 
+	static Random random = new Random();
+	
+	public double exp(double lambda) {
+		return -Math.log(1 - random.nextDouble()) / lambda;
+	}
+
 	// lambda - arrival rate
 	// mu - service rate
 	public StatisticsSample run(double lambda, double mu, int clientsSize) {
 
-		ExponentialDistribution arrivalExp = new ExponentialDistribution(lambda);
+//		ExponentialDistribution arrivalExp = new ExponentialDistribution(
+//				1.0 / lambda);
 
 		Queue<Double> queue = new LinkedList<Double>();
 
@@ -31,7 +38,7 @@ public class MD1 {
 		double serviceTIme = 1.0 / mu;
 
 		// time of next arrival
-		double nextArrival = arrivalExp.sample();
+		double nextArrival = exp(lambda);
 		// time of next completed service
 		double nextService = nextArrival + serviceTIme;
 
@@ -43,7 +50,7 @@ public class MD1 {
 			// next event is an arrival
 			if (nextArrival < nextService) {
 				queue.add(nextArrival);
-				nextArrival += arrivalExp.sample();
+				nextArrival += exp(lambda);
 			} else {
 
 				// next event is a service completion
@@ -83,7 +90,8 @@ public class MD1 {
 		builder.append(statisticsSample.toStringTIndividual());
 
 		try {
-			FileUtils.writeStringToFile(new File("./samples/statistics_MD1.txt"),
+			FileUtils.writeStringToFile(
+					new File("./samples/statistics_MD1.txt"),
 					builder.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
