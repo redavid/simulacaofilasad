@@ -1,12 +1,12 @@
 package br.ufrj.dcc.ad20122.math;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.distribution.TDistribution;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
+import org.apache.commons.math3.stat.descriptive.moment.Mean;
 
 import br.ufrj.dcc.ad20122.model.Sample;
 
@@ -40,9 +40,12 @@ public class StatisticsSample {
 		}
 
 		this.summaryStatisticsT = new SummaryStatistics();
+		this.summaryStatisticsT.setMeanImpl(new Mean());
+
 		for (Double double1 : dataT) {
 			summaryStatisticsT.addValue(double1);
 		}
+
 	}
 
 	public double getWMean() {
@@ -94,9 +97,23 @@ public class StatisticsSample {
 	}
 
 	public String toStringTIndividual() {
+
+		List<Double> dataTMean = new ArrayList<Double>();
+		Mean mean = new Mean();
+
+		double[] dataTArray = ArrayUtils.toPrimitive(this.dataT
+				.toArray(new Double[0]));
+		dataTMean.add(dataTArray[0]);
+		for (int i = 1; i < this.dataT.size(); i++) {
+
+			// E[T]
+			dataTMean.add(mean.evaluate(dataTArray, 0, i));
+
+		}
+
 		StringBuilder builder = new StringBuilder();
 		builder.append("T invidual: \n");
-		for (double double1 : this.dataT) {
+		for (double double1 : dataTMean) {
 			builder.append("" + double1);
 			builder.append("\n");
 		}

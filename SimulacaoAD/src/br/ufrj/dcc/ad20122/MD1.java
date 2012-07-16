@@ -24,7 +24,8 @@ public class MD1 {
 	// mu - service rate
 	public StatisticsSample run(double lambda, double mu, int clientsSize) {
 
-		ExponentialDistribution arrivalExp = new ExponentialDistribution(lambda);
+		ExponentialDistribution arrivalExp = new ExponentialDistribution(
+				1.0 / lambda);
 
 		Queue<Double> queue = new LinkedList<Double>();
 
@@ -76,7 +77,7 @@ public class MD1 {
 	public static void main(String[] args) {
 		double lambda = 1.0; // arrival rate
 		double mu = 2.0; // service rate
-		int sampleSize = 10000;
+		int sampleSize = 1000;
 
 		StatisticsSample statisticsSample = new MD1().run(lambda, mu,
 				sampleSize);
