@@ -113,7 +113,8 @@ public class StatisticsSample {
 	private ConfidenceInterval getMeansTConfidenceInterval95(double value) {
 		double significance = 0.95;
 
-		TDistribution tDist = new TDistribution(summaryStatisticsMeansT.getN() - 1);
+		TDistribution tDist = new TDistribution(
+				summaryStatisticsMeansT.getN() - 1);
 		double a = tDist.inverseCumulativeProbability(1.0 - significance / 2);
 		double confidence = a * summaryStatisticsMeansT.getStandardDeviation()
 				/ Math.sqrt(summaryStatisticsMeansT.getN());
@@ -184,8 +185,9 @@ public class StatisticsSample {
 	}
 
 	private String toStringWithSample() {
-		return "" + this.sample + " E[W]:" + this.getWMean() + " E[T]:"
-				+ this.getTMean() + ", Var[T]: " + this.getTVariance()
+		return "" + this.sample + " E[W]:" + this.getWMean() + " E[T] Chart:"
+				+ this.getMeansTMean() + " E[T]:" + this.getTMean()
+				+ ", Var[T]: " + this.getTVariance()
 				+ ", E[T] ConfidenceInterval: "
 				+ this.getMeansTConfidenceInterval95(this.getTMean())
 				+ ", Var[T] ConfidenceInterval: "
@@ -193,12 +195,13 @@ public class StatisticsSample {
 	}
 
 	private String toStringWithoutSample() {
-		return " E[W]:" + this.getWMean() + " E[T]:" + this.getMeansTMean()
-				+ ", Var[T]: " + this.getMeansTVariance()
+		return " E[T] Chart:" + " E[W]:" + this.getWMean()
+				+ this.getMeansTMean() + " E[T]:" + this.getTMean()
+				+ ", Var[T]: " + this.getTVariance()
 				+ ", E[T] ConfidenceInterval: "
-				+ this.getMeansTConfidenceInterval95(this.getMeansTMean())
+				+ this.getMeansTConfidenceInterval95(this.getTMean())
 				+ ", Var[T] ConfidenceInterval: "
-				+ this.getMeansTConfidenceInterval95(this.getMeansTVariance());
+				+ this.getMeansTConfidenceInterval95(this.getTVariance());
 
 	}
 
