@@ -6,26 +6,25 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.math3.distribution.ExponentialDistribution;
 
 import br.ufrj.dcc.ad20122.math.StatisticsSample;
 
 public class MD1 {
 
-	static Random random = new Random();
-	
-	public double exp(double lambda) {
-		return -Math.log(1 - random.nextDouble()) / lambda;
-	}
+	// static Random random = new Random();
+
+	// public double exp(double lambda) {
+	// return -Math.log(1 - random.nextDouble()) / lambda;
+	// }
 
 	// lambda - arrival rate
 	// mu - service rate
 	public StatisticsSample run(double lambda, double mu, int clientsSize) {
 
-//		ExponentialDistribution arrivalExp = new ExponentialDistribution(
-//				1.0 / lambda);
+		ExponentialDistribution arrivalExp = new ExponentialDistribution(lambda);
 
 		Queue<Double> queue = new LinkedList<Double>();
 
@@ -38,19 +37,19 @@ public class MD1 {
 		double serviceTIme = 1.0 / mu;
 
 		// time of next arrival
-		double nextArrival = exp(lambda);
+		double nextArrival = arrivalExp.sample();// exp(lambda);
 		// time of next completed service
 		double nextService = nextArrival + serviceTIme;
 
 		System.out.println("Simulate M/D/1 Queue.");
 
 		// simulate the M/D/1 queue
-		while (timeW1.size() < clientsSize) {
+		while (timeW1.size() <= clientsSize) {
 
 			// next event is an arrival
 			if (nextArrival < nextService) {
 				queue.add(nextArrival);
-				nextArrival += exp(lambda);
+				nextArrival += arrivalExp.sample();// exp(lambda);
 			} else {
 
 				// next event is a service completion
