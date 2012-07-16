@@ -22,9 +22,11 @@ public class StatisticsSample {
 
 	List<Double> dataW;
 	List<Double> dataT;
+	List<Double> meansT;
 
 	SummaryStatistics summaryStatisticsW;
 	SummaryStatistics summaryStatisticsT;
+	SummaryStatistics summaryStatisticsMeansT;
 	Sample sample;
 
 	public StatisticsSample(List<Double> data) {
@@ -40,18 +42,22 @@ public class StatisticsSample {
 
 		this.dataW = dataW;
 		this.dataT = dataT;
-
+		this.meansT = this.generateDataTMean();
 		this.sample = sample;
+
 		this.summaryStatisticsW = new SummaryStatistics();
 		for (Double double1 : dataW) {
 			summaryStatisticsW.addValue(double1);
 		}
 
 		this.summaryStatisticsT = new SummaryStatistics();
-		this.summaryStatisticsT.setMeanImpl(new Mean());
-
 		for (Double double1 : dataT) {
 			summaryStatisticsT.addValue(double1);
+		}
+
+		this.summaryStatisticsMeansT = new SummaryStatistics();
+		for (Double double1 : meansT) {
+			this.summaryStatisticsMeansT.addValue(double1);
 		}
 
 	}
@@ -64,6 +70,10 @@ public class StatisticsSample {
 		return summaryStatisticsT.getMean();
 	}
 
+	public double getMeansTMean() {
+		return summaryStatisticsMeansT.getMean();
+	}
+
 	public double getWVariance() {
 		return this.summaryStatisticsW.getVariance();
 	}
@@ -72,12 +82,20 @@ public class StatisticsSample {
 		return this.summaryStatisticsT.getVariance();
 	}
 
+	public double getMeansTVariance() {
+		return this.summaryStatisticsMeansT.getVariance();
+	}
+
 	public double getWStandardDeviation() {
 		return this.summaryStatisticsW.getStandardDeviation();
 	}
 
 	public double getTStandardDeviation() {
 		return this.summaryStatisticsT.getStandardDeviation();
+	}
+
+	public double getMeansTStandardDeviation() {
+		return this.summaryStatisticsMeansT.getStandardDeviation();
 	}
 
 	// private ConfidenceInterval getWConfidenceInterval95(double value) {
@@ -92,19 +110,19 @@ public class StatisticsSample {
 	//
 	// }
 
-	private ConfidenceInterval getTConfidenceInterval95(double value) {
+	private ConfidenceInterval getMeansTConfidenceInterval95(double value) {
 		double significance = 0.95;
 
-		TDistribution tDist = new TDistribution(summaryStatisticsT.getN() - 1);
+		TDistribution tDist = new TDistribution(summaryStatisticsMeansT.getN() - 1);
 		double a = tDist.inverseCumulativeProbability(1.0 - significance / 2);
-		double confidence = a * summaryStatisticsT.getStandardDeviation()
-				/ Math.sqrt(summaryStatisticsT.getN());
+		double confidence = a * summaryStatisticsMeansT.getStandardDeviation()
+				/ Math.sqrt(summaryStatisticsMeansT.getN());
 
 		return new ConfidenceInterval(value - confidence, value + confidence);
 
 	}
 
-	private List<Double> getDataTMean() {
+	private List<Double> generateDataTMean() {
 		List<Double> dataTMean = new ArrayList<Double>();
 		Mean mean = new Mean();
 
@@ -124,7 +142,7 @@ public class StatisticsSample {
 
 		XYSeries series = new XYSeries("N por E[T]");
 
-		List<Double> means = this.getDataTMean();
+		List<Double> means = this.meansT;
 		for (int i = 0; i < means.size(); i++) {
 			series.add(i, means.get(i));
 
@@ -151,7 +169,7 @@ public class StatisticsSample {
 
 		StringBuilder builder = new StringBuilder();
 		builder.append("T invidual: \n");
-		for (double double1 : this.getDataTMean()) {
+		for (double double1 : this.meansT) {
 			builder.append(("" + double1).replace(".", ","));
 			builder.append("\n");
 		}
@@ -169,18 +187,18 @@ public class StatisticsSample {
 		return "" + this.sample + " E[W]:" + this.getWMean() + " E[T]:"
 				+ this.getTMean() + ", Var[T]: " + this.getTVariance()
 				+ ", E[T] ConfidenceInterval: "
-				+ this.getTConfidenceInterval95(this.getTMean())
+				+ this.getMeansTConfidenceInterval95(this.getTMean())
 				+ ", Var[T] ConfidenceInterval: "
-				+ this.getTConfidenceInterval95(this.getTVariance());
+				+ this.getMeansTConfidenceInterval95(this.getTVariance());
 	}
 
 	private String toStringWithoutSample() {
-		return " E[W]:" + this.getWMean() + " E[T]:" + this.getTMean()
-				+ ", Var[T]: " + this.getTVariance()
+		return " E[W]:" + this.getWMean() + " E[T]:" + this.getMeansTMean()
+				+ ", Var[T]: " + this.getMeansTVariance()
 				+ ", E[T] ConfidenceInterval: "
-				+ this.getTConfidenceInterval95(this.getTMean())
+				+ this.getMeansTConfidenceInterval95(this.getMeansTMean())
 				+ ", Var[T] ConfidenceInterval: "
-				+ this.getTConfidenceInterval95(this.getTVariance());
+				+ this.getMeansTConfidenceInterval95(this.getMeansTVariance());
 
 	}
 
