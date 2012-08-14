@@ -4,9 +4,9 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
-import org.apache.commons.math3.distribution.NormalDistribution;
 
 import br.ufrj.dcc.ad.math.StatisticsSample;
 import br.ufrj.dcc.ad.model.Sample;
@@ -17,6 +17,34 @@ import br.ufrj.dcc.ad.model.User;
 public class Simulations {
 
 	private static int TRANSIENT_VALUE = 1000;
+
+	private static Random random = new Random();
+
+	public static double uniform() {
+		return random.nextDouble();
+	}
+
+	public static double uniform(double a, double b) {
+		return a + uniform() * (b - a);
+	}
+
+	public static double gaussian() {
+		// use the polar form of the Box-Muller transform
+		double r, x, y;
+		do {
+			x = uniform(-1.0, 1.0);
+			y = uniform(-1.0, 1.0);
+			r = x * x + y * y;
+		} while (r >= 1 || r == 0);
+		return x * Math.sqrt(-2 * Math.log(r) / r);
+
+		// Remark: y * Math.sqrt(-2 * Math.log(r) / r)
+		// is an independent random gaussian
+	}
+
+	public static double gaussian(double mean, double stddev) {
+		return mean + stddev * gaussian();
+	}
 
 	// Case Deterministic - Exponencial
 	public StatisticsSample simulateDetExpCase1(Sample sample) {
@@ -281,8 +309,8 @@ public class Simulations {
 		ExponentialDistribution arrivalExp = new ExponentialDistribution(
 				sample.getLambda());
 
-		NormalDistribution service1Normal = new NormalDistribution(
-				1.0 / sample.getMean(), sample.getStandardDeviation());
+		// NormalDistribution service1Normal = new NormalDistribution(
+		// 1.0 / sample.getMean(), sample.getStandardDeviation());
 
 		ExponentialDistribution service2Exp = new ExponentialDistribution(
 				1.0 / sample.getMu2());
@@ -299,7 +327,8 @@ public class Simulations {
 			if (nextArrival <= nextService1 && nextArrival <= nextService2) {
 
 				User newUser = new User(nextArrival,
-						this.getSampleTruncatedNormal(service1Normal));
+						this.getSampleTruncatedNormal(1.0 / sample.getMean(),
+								sample.getStandardDeviation()));// this.getSampleTruncatedNormal(service1Normal));
 
 				if (queue1.isEmpty() && queue2.isEmpty()) {
 					nextService1 = nextArrival + newUser.getServiceTime();
@@ -394,11 +423,20 @@ public class Simulations {
 		return new StatisticsSample(resultList, timesT, sample);
 	}
 
-	private double getSampleTruncatedNormal(
-			NormalDistribution normalDistribution) {
+	// private double getSampleTruncatedNormal(
+	// NormalDistribution normalDistribution) {
+	// double truncatedValue = Double.NEGATIVE_INFINITY;
+	//
+	// while ((truncatedValue = normalDistribution.sample()) <= 0) {
+	// }
+	//
+	// return truncatedValue;
+	// }
+
+	private double getSampleTruncatedNormal(double mean, double stddev) {
 		double truncatedValue = Double.NEGATIVE_INFINITY;
 
-		while ((truncatedValue = normalDistribution.sample()) <= 0) {
+		while ((truncatedValue = gaussian(mean, stddev)) <= 0) {
 		}
 
 		return truncatedValue;
@@ -407,26 +445,27 @@ public class Simulations {
 	public static void main(String[] args) {
 
 		// arrival rate
-		double lambda1 = 1.0;
+		// double lambda1 = 1.0;
 		// service rate
-		double mu1 = 2.0;
+		// double mu1 = 2.0;
 		double mu2 = 4.0;
 		int sampleSize = 2;
 
-		// double lambda2 = 0.5;
-		// double mean = 10.0;
-		// double standardDeviation = 1;
+		double lambda2 = 0.5;
+		double mean = 10.0;
+		double standardDeviation = 1;
 
 		Sample sample;
-		sample = new Sample(SimulationCase.CASE1, SimulationType.DETERMINISTIC,
-				sampleSize, lambda1, mu1, mu2);
-
-		System.out.println(new Simulations().simulateDetExpCase1(sample));
-
-		// sample = new Sample(SimulationCase.CASE1, SimulationType.NORMAL,
-		// sampleSize, lambda2, mean, standardDeviation, mu2);
+		// sample = new Sample(SimulationCase.CASE1,
+		// SimulationType.DETERMINISTIC,
+		// sampleSize, lambda1, mu1, mu2);
 		//
-		// System.out.println(new Simulations().simulateNormalExpCase1(sample));
+		// System.out.println(new Simulations().simulateDetExpCase1(sample));
+
+		sample = new Sample(SimulationCase.CASE1, SimulationType.NORMAL,
+				sampleSize, lambda2, mean, standardDeviation, mu2);
+
+		System.out.println(new Simulations().simulateNormalExpCase1(sample));
 
 	}
 }

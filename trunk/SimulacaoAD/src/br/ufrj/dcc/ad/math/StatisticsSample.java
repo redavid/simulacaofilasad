@@ -115,16 +115,16 @@ public class StatisticsSample {
 	}
 
 	private ConfidenceInterval getMeansTConfidenceInterval95(double value) {
-		double significance = 0.95;
+		double significance = 0.05; // 1 - significance = 0.95
 
 		TDistribution tDist = new TDistribution(
-				summaryStatisticsMeansT.getN() - 1);
+				this.summaryStatisticsMeansT.getN() - 1);
 		double a = tDist.inverseCumulativeProbability(1.0 - significance / 2);
-		double confidence = a * summaryStatisticsMeansT.getStandardDeviation()
-				/ Math.sqrt(summaryStatisticsMeansT.getN());
+		double confidence = a
+				* this.summaryStatisticsMeansT.getStandardDeviation()
+				/ Math.sqrt(this.summaryStatisticsMeansT.getN());
 
 		return new ConfidenceInterval(value - confidence, value + confidence);
-
 	}
 
 	private List<Double> generateDataTMean() {
