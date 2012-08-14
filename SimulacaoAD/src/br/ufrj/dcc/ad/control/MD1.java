@@ -1,13 +1,10 @@
 package br.ufrj.dcc.ad.control;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.math3.distribution.ExponentialDistribution;
 
 import br.ufrj.dcc.ad.math.StatisticsSample;
@@ -83,19 +80,19 @@ public class MD1 {
 		System.out.println(statisticsString);
 		builder.append(statisticsSample.toStringTIndividual());
 
-		try {
-			FileUtils.writeStringToFile(
-					new File("./samples/statistics_MD1.txt"),
-					builder.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			statisticsSample.generateChart("./samples/chart_MD1.jpg");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// try {
+		// FileUtils.writeStringToFile(
+		// new File("./samples/statistics_MD1.txt"),
+		// builder.toString());
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// }
+		//
+		// try {
+		// statisticsSample.generateChart("./samples/chart_MD1.jpg");
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// }
 
 	}
 }
